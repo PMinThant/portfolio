@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
 // ── Data ────────────────────────────────────────────────────────────────────
 
@@ -7,6 +7,48 @@ const SKILLS = [
   { category: 'Visualisation', items: ['Tableau', 'PowerBI', 'Looker Studio', 'Excel'] },
   { category: 'Python', items: ['NumPy', 'Pandas', 'Matplotlib'] },
   { category: 'Engineering', items: ['PLC', 'Arduino', 'Raspberry Pi', 'AGV / Robotics'] },
+]
+
+const PROJECTS = [
+  {
+    name: 'Roles in Analytics',
+    desc: 'Interactive viz mapping the analytics career landscape — comparing responsibilities, skills, and paths across analyst, scientist, and engineer roles. Over 6,900 views on Tableau Public.',
+    tags: ['Tableau', 'Career Analytics', 'Data Storytelling'],
+    link: 'https://public.tableau.com/app/profile/phyo.min.thant/viz/RolesinAnalytics_17656971884390/RolesinAnalytics',
+    embed: 'https://public.tableau.com/views/RolesinAnalytics_17656971884390/RolesinAnalytics?:embed=y&:showVizHome=no&:toolbar=no',
+    type: 'tableau',
+  },
+  {
+    name: 'Maven Roasters Dashboard',
+    desc: 'Advanced Tableau dashboard analysing coffee chain sales performance using LOD expressions, calculated fields, and dynamic filters to surface revenue trends and top products.',
+    tags: ['Tableau', 'Advanced Analytics', 'LOD Expressions'],
+    link: 'https://public.tableau.com/app/profile/phyo.min.thant/viz/MavenRoastersDashboard-TableauAdvancedPractice/MavenRoasters',
+    embed: 'https://public.tableau.com/views/MavenRoastersDashboard-TableauAdvancedPractice/MavenRoasters?:embed=y&:showVizHome=no&:toolbar=no',
+    type: 'tableau',
+  },
+  {
+    name: 'Washington State Dept of Energy',
+    desc: 'Geospatial dashboard tracking BEV and PHEV adoption across Washington State, visualising regional EV distribution and growth trends to support energy infrastructure planning.',
+    tags: ['Tableau', 'Geospatial', 'Energy', 'EV Analytics'],
+    link: 'https://public.tableau.com/app/profile/phyo.min.thant/viz/WashingtonStateDepartmentofEnergy_17340429458390/WashingtonBEVsPHEVS',
+    embed: 'https://public.tableau.com/views/WashingtonStateDepartmentofEnergy_17340429458390/WashingtonBEVsPHEVS?:embed=y&:showVizHome=no&:toolbar=no',
+    type: 'tableau',
+  },
+  {
+    name: 'Global CO₂ Emission',
+    desc: 'World-level analysis of CO₂ emission trends across countries and industries, combining time-series and geographic views to highlight biggest emitters and per-capita comparisons.',
+    tags: ['Tableau', 'Environmental Analytics', 'Time Series'],
+    link: 'https://public.tableau.com/app/profile/phyo.min.thant/viz/GlobalCO2Emission_17632518166410/GlobalCO2Emission',
+    embed: 'https://public.tableau.com/views/GlobalCO2Emission_17632518166410/GlobalCO2Emission?:embed=y&:showVizHome=no&:toolbar=no',
+    type: 'tableau',
+  },
+  {
+    name: 'Sleep & Health Lifestyle Analysis',
+    desc: 'Explores a health and lifestyle dataset to uncover patterns in sleep quality. Identifies key trends, outliers, and relationships between sleep duration, physical activity, stress levels, and overall health indicators.',
+    tags: ['Google Sheets', 'Google Slides', 'Descriptive Statistics'],
+    link: 'https://github.com/PMinThant/statistics/tree/main/01-health-sleep-descriptive-stats',
+    type: 'github',
+  },
 ]
 
 const EXPERIENCE = [
@@ -72,117 +114,127 @@ const EDUCATION = [
     degree: 'MSc. Business Analytics & Digital Transformation',
     school: 'Asian Institute of Technology',
     period: '2024 – 2025',
-    accent: '#0d9488',
   },
   {
     degree: 'BE, Mechatronic Engineering',
     school: 'Technological University (Hmawbi)',
     period: '2015 – 2023',
-    accent: '#94a3b8',
   },
 ]
 
-const PROJECTS = [
-  {
-    name: 'Sleep & Health Lifestyle Analysis',
-    desc: 'Explores a health and lifestyle dataset to uncover patterns in sleep quality and related metrics. Identifies key trends, outliers, and relationships between sleep duration, physical activity, stress levels, and overall health indicators using descriptive statistics.',
-    tags: ['Google Sheets', 'Google Slides', 'ChatGPT', 'Descriptive Statistics'],
-    link: 'https://github.com/PMinThant/statistics/tree/main/01-health-sleep-descriptive-stats',
-  },
-  {
-    name: 'Roles in Analytics',
-    desc: 'An interactive Tableau viz mapping out the landscape of analytics roles — comparing responsibilities, required skills, and career paths across data analyst, data scientist, and data engineer positions. Reached 6,900+ views on Tableau Public.',
-    tags: ['Tableau', 'Career Analytics', 'Data Storytelling'],
-    link: 'https://public.tableau.com/app/profile/phyo.min.thant/viz/RolesinAnalytics_17656971884390/RolesinAnalytics',
-  },
-  {
-    name: 'Maven Roasters Dashboard',
-    desc: 'Advanced Tableau dashboard analysing sales performance for a fictional coffee chain. Applies LOD expressions, calculated fields, and dynamic filters to surface revenue trends, top products, and store-level comparisons.',
-    tags: ['Tableau', 'Advanced Analytics', 'LOD Expressions', 'Dashboard Design'],
-    link: 'https://public.tableau.com/app/profile/phyo.min.thant/viz/MavenRoastersDashboard-TableauAdvancedPractice/MavenRoasters',
-  },
-  {
-    name: 'Washington State Dept of Energy',
-    desc: 'Geospatial dashboard tracking Battery Electric Vehicle (BEV) and Plug-in Hybrid (PHEV) adoption across Washington State. Visualises regional EV distribution and growth trends to support energy infrastructure planning.',
-    tags: ['Tableau', 'Geospatial', 'Energy', 'EV Analytics'],
-    link: 'https://public.tableau.com/app/profile/phyo.min.thant/viz/WashingtonStateDepartmentofEnergy_17340429458390/WashingtonBEVsPHEVS',
-  },
-  {
-    name: 'Global CO2 Emission',
-    desc: 'World-level analysis of CO2 emissions trends across countries and industries. Combines time-series and geographic views to highlight the biggest emitters, emission growth rates, and per-capita comparisons.',
-    tags: ['Tableau', 'Environmental Analytics', 'Global Data', 'Time Series'],
-    link: 'https://public.tableau.com/app/profile/phyo.min.thant/viz/GlobalCO2Emission_17632518166410/GlobalCO2Emission',
-  },
-]
+const NAV_SECTIONS = ['about', 'skills', 'featured', 'projects', 'experience', 'education', 'contact']
 
-const CONTACT = [
-  { label: 'Email', value: 'phyominthant840@gmail.com', href: 'mailto:phyominthant840@gmail.com' },
-  { label: 'Phone', value: '0111-254-8750', href: 'tel:+601112548750' },
-  { label: 'LinkedIn', value: 'View profile', href: '#' }, // replace # with your LinkedIn URL
-]
+// ── ProjectCard ──────────────────────────────────────────────────────────────
 
-const NAV_SECTIONS = ['about', 'skills', 'projects', 'experience', 'education', 'contact']
+function ProjectCard({ project, isExpanded, onToggle }) {
+  const { name, desc, tags, link, embed, type } = project
 
-// ── Styles (inline) ──────────────────────────────────────────────────────────
-
-const s = {
-  teal: '#0d9488',
-  black: '#0a0a0a',
-  gray: '#555',
-  lightGray: '#888',
-  border: '#e5e5e5',
-  bg: '#fafaf9',
-  bgAlt: '#f5f5f4',
-}
-
-// ── Sub-components ───────────────────────────────────────────────────────────
-
-function Tag({ children, teal }) {
   return (
-    <span style={{
-      fontFamily: "'JetBrains Mono', monospace",
-      fontSize: 11,
-      padding: '3px 10px',
-      borderRadius: 4,
-      border: teal ? '1px solid #99f6e4' : `1px solid ${s.border}`,
-      background: teal ? '#f0fdfa' : s.bgAlt,
-      color: teal ? s.teal : '#444',
-    }}>
-      {children}
-    </span>
+    <div style={{
+      background: '#fff',
+      borderRadius: 20,
+      overflow: 'hidden',
+      boxShadow: '0 2px 20px rgba(0,0,0,0.08)',
+      transition: 'box-shadow 0.3s, transform 0.3s',
+    }}
+      onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 8px 40px rgba(0,0,0,0.14)'; e.currentTarget.style.transform = 'translateY(-2px)' }}
+      onMouseLeave={e => { e.currentTarget.style.boxShadow = '0 2px 20px rgba(0,0,0,0.08)'; e.currentTarget.style.transform = 'translateY(0)' }}
+    >
+      {/* Dashboard preview */}
+      {type === 'tableau' && (
+        <div style={{ position: 'relative', background: '#f5f5f7' }}>
+          {isExpanded ? (
+            <div style={{ height: 400, position: 'relative' }}>
+              <iframe
+                src={embed}
+                width="100%"
+                height="100%"
+                style={{ border: 'none', display: 'block' }}
+                title={name}
+              />
+              <button
+                onClick={onToggle}
+                style={{
+                  position: 'absolute', top: 12, right: 12,
+                  background: 'rgba(0,0,0,0.5)', color: '#fff',
+                  border: 'none', borderRadius: 20, padding: '6px 14px',
+                  fontSize: 12, cursor: 'pointer', backdropFilter: 'blur(4px)',
+                }}
+              >
+                ✕ Close
+              </button>
+            </div>
+          ) : (
+            <div
+              onClick={onToggle}
+              style={{
+                height: 180, display: 'flex', flexDirection: 'column',
+                alignItems: 'center', justifyContent: 'center', cursor: 'pointer',
+                gap: 10, background: 'linear-gradient(135deg, #f5f5f7 0%, #e8e8ed 100%)',
+              }}
+            >
+              <div style={{
+                width: 48, height: 48, borderRadius: 12,
+                background: '#0071e3', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: 22, boxShadow: '0 4px 12px rgba(0,113,227,0.3)',
+              }}>
+                📊
+              </div>
+              <span style={{ fontSize: 13, color: '#6e6e73', fontWeight: 500 }}>Click to preview dashboard</span>
+            </div>
+          )}
+        </div>
+      )}
+
+      {type === 'github' && (
+        <div style={{
+          height: 120, background: 'linear-gradient(135deg, #1c1c1e 0%, #2c2c2e 100%)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12,
+        }}>
+          <div style={{ fontSize: 32 }}>🔬</div>
+          <span style={{ fontSize: 13, color: '#98989d', fontWeight: 500 }}>Statistical Analysis</span>
+        </div>
+      )}
+
+      {/* Info */}
+      <div style={{ padding: '1.5rem' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 10 }}>
+          <p style={{ fontSize: '1.05rem', fontWeight: 600, color: '#1d1d1f', lineHeight: 1.3 }}>{name}</p>
+          <a
+            href={link} target="_blank" rel="noreferrer"
+            style={{
+              fontSize: 12, color: '#0071e3', textDecoration: 'none',
+              fontWeight: 500, whiteSpace: 'nowrap', marginLeft: 12, flexShrink: 0,
+            }}
+          >
+            View ↗
+          </a>
+        </div>
+        <p style={{ fontSize: 13, color: '#6e6e73', lineHeight: 1.7, marginBottom: 14 }}>{desc}</p>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+          {tags.map(t => (
+            <span key={t} style={{
+              fontSize: 11, fontWeight: 500,
+              padding: '4px 10px', borderRadius: 20,
+              background: '#f5f5f7', color: '#1d1d1f',
+            }}>{t}</span>
+          ))}
+        </div>
+      </div>
+    </div>
   )
 }
 
-function SectionLabel({ children }) {
-  return (
-    <p style={{
-      fontFamily: "'JetBrains Mono', monospace",
-      fontSize: 11,
-      color: s.teal,
-      letterSpacing: '.12em',
-      textTransform: 'uppercase',
-      marginBottom: 12,
-    }}>
-      {children}
-    </p>
-  )
-}
-
-function SectionHeading({ children }) {
-  return (
-    <h2 className="fd" style={{ fontSize: '1.9rem', fontWeight: 400, color: s.black, lineHeight: 1.2, marginBottom: 0 }}>
-      {children}
-    </h2>
-  )
-}
-
-// ── Main component ───────────────────────────────────────────────────────────
+// ── Main App ─────────────────────────────────────────────────────────────────
 
 export default function App() {
   const [activeSection, setActiveSection] = useState('hero')
+  const [expandedProject, setExpandedProject] = useState(null)
+  const [scrolled, setScrolled] = useState(false)
 
   useEffect(() => {
     const handleScroll = () => {
+      setScrolled(window.scrollY > 20)
       const all = ['hero', ...NAV_SECTIONS]
       for (const id of all) {
         const el = document.getElementById(id)
@@ -199,29 +251,31 @@ export default function App() {
   const scrollTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
 
   return (
-    <div>
+    <div style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif", background: '#fff', color: '#1d1d1f' }}>
+
       {/* ── Nav ── */}
       <nav style={{
-        position: 'sticky', top: 0, zIndex: 50,
-        background: 'rgba(250,250,249,0.96)',
-        borderBottom: `1px solid ${s.border}`,
-        padding: '0 2rem', height: 56,
+        position: 'sticky', top: 0, zIndex: 100,
+        background: scrolled ? 'rgba(255,255,255,0.85)' : 'rgba(255,255,255,0.72)',
+        backdropFilter: 'saturate(180%) blur(20px)',
+        WebkitBackdropFilter: 'saturate(180%) blur(20px)',
+        borderBottom: scrolled ? '1px solid rgba(0,0,0,0.08)' : '1px solid transparent',
+        transition: 'all 0.3s',
+        padding: '0 2rem', height: 52,
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
       }}>
-        <span className="fm" style={{ fontSize: 13, fontWeight: 500, color: s.teal }}>phyo.dev</span>
-        <div style={{ display: 'flex', gap: '1.4rem' }}>
-          {NAV_SECTIONS.map((sec) => (
-            <button
-              key={sec}
-              onClick={() => scrollTo(sec)}
-              style={{
-                background: 'none', border: 'none', cursor: 'pointer',
-                fontSize: 13, fontFamily: "'Inter', sans-serif",
-                color: activeSection === sec ? s.teal : s.lightGray,
-                fontWeight: activeSection === sec ? 500 : 400,
-                textTransform: 'capitalize', transition: 'color .2s',
-              }}
-            >
+        <span style={{ fontSize: 17, fontWeight: 600, color: '#1d1d1f', letterSpacing: '-0.02em' }}>
+          Phyo Min Thant
+        </span>
+        <div style={{ display: 'flex', gap: '1.5rem' }}>
+          {NAV_SECTIONS.map(sec => (
+            <button key={sec} onClick={() => scrollTo(sec)} style={{
+              background: 'none', border: 'none', cursor: 'pointer',
+              fontSize: 13, fontFamily: 'inherit',
+              color: activeSection === sec ? '#0071e3' : '#6e6e73',
+              fontWeight: activeSection === sec ? 500 : 400,
+              textTransform: 'capitalize', transition: 'color .2s', padding: 0,
+            }}>
               {sec}
             </button>
           ))}
@@ -229,64 +283,86 @@ export default function App() {
       </nav>
 
       {/* ── Hero ── */}
-      <section id="hero" style={{ minHeight: '88vh', display: 'flex', alignItems: 'center', padding: '0 2rem', maxWidth: 1100, margin: '0 auto' }}>
-        <div>
-          <p className="fm" style={{ fontSize: 11, color: s.teal, letterSpacing: '.12em', textTransform: 'uppercase', marginBottom: 20 }}>
-            // data scientist & analyst
-          </p>
-          <h1 className="fd" style={{ fontSize: 'clamp(2.8rem, 9vw, 5.2rem)', fontWeight: 400, lineHeight: 1.05, color: s.black, marginBottom: 24 }}>
-            Phyo Min Thant
-          </h1>
-          <p style={{ fontSize: '1.05rem', color: s.gray, maxWidth: 540, lineHeight: 1.85, marginBottom: 36 }}>
-            Bridging data, engineering, and business strategy to drive measurable impact.
-            MSc. Business Analytics graduate with hands-on experience across Myanmar, Thailand, and Malaysia.
-          </p>
-          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-            <button
-              onClick={() => scrollTo('experience')}
-              style={{ padding: '12px 28px', background: s.black, color: s.bg, border: 'none', borderRadius: 6, fontSize: 14, fontWeight: 500, cursor: 'pointer', fontFamily: "'Inter', sans-serif" }}
-            >
-              My Experience
-            </button>
-            <button
-              onClick={() => scrollTo('contact')}
-              style={{ padding: '12px 28px', background: 'transparent', color: s.black, border: `1.5px solid ${s.black}`, borderRadius: 6, fontSize: 14, fontWeight: 500, cursor: 'pointer', fontFamily: "'Inter', sans-serif" }}
-            >
-              Get in Touch
-            </button>
-          </div>
+      <section id="hero" style={{
+        minHeight: '92vh', display: 'flex', flexDirection: 'column',
+        alignItems: 'center', justifyContent: 'center',
+        textAlign: 'center', padding: '4rem 2rem',
+        background: 'linear-gradient(180deg, #fbfbfd 0%, #ffffff 100%)',
+      }}>
+        <p style={{ fontSize: 14, fontWeight: 500, color: '#6e6e73', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: 20 }}>
+          Data Scientist &amp; Analyst
+        </p>
+        <h1 style={{
+          fontSize: 'clamp(3rem, 9vw, 6.5rem)', fontWeight: 700,
+          letterSpacing: '-0.04em', lineHeight: 1.05,
+          color: '#1d1d1f', marginBottom: 28, maxWidth: 900,
+        }}>
+          Turning data into decisions.
+        </h1>
+        <p style={{ fontSize: 'clamp(1rem, 2vw, 1.25rem)', color: '#6e6e73', maxWidth: 560, lineHeight: 1.75, marginBottom: 48 }}>
+          MSc. Business Analytics graduate with hands-on experience in dashboards, robotics, and business intelligence across Malaysia, Thailand, and Myanmar.
+        </p>
+        <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', justifyContent: 'center' }}>
+          <button onClick={() => scrollTo('projects')} style={{
+            padding: '14px 30px', background: '#0071e3', color: '#fff',
+            border: 'none', borderRadius: 980, fontSize: 15, fontWeight: 500,
+            cursor: 'pointer', fontFamily: 'inherit', transition: 'background .2s',
+          }}
+            onMouseEnter={e => e.currentTarget.style.background = '#0077ed'}
+            onMouseLeave={e => e.currentTarget.style.background = '#0071e3'}
+          >
+            View Projects
+          </button>
+          <button onClick={() => scrollTo('contact')} style={{
+            padding: '14px 30px', background: 'rgba(0,0,0,0.06)', color: '#1d1d1f',
+            border: 'none', borderRadius: 980, fontSize: 15, fontWeight: 500,
+            cursor: 'pointer', fontFamily: 'inherit', transition: 'background .2s',
+          }}
+            onMouseEnter={e => e.currentTarget.style.background = 'rgba(0,0,0,0.1)'}
+            onMouseLeave={e => e.currentTarget.style.background = 'rgba(0,0,0,0.06)'}
+          >
+            Get in Touch
+          </button>
         </div>
       </section>
 
       {/* ── About ── */}
-      <section id="about" style={{ padding: '4.5rem 2rem', borderTop: `1px solid ${s.border}`, maxWidth: 1100, margin: '0 auto' }}>
-        <SectionLabel>01 / About</SectionLabel>
-        <SectionHeading>A bit about me</SectionHeading>
-        <div style={{ marginTop: 24 }}>
-          <p style={{ fontSize: 15, color: s.gray, lineHeight: 1.85, maxWidth: 640, marginBottom: 16 }}>
-            I'm a data scientist and analyst with a multidisciplinary background spanning mechatronic engineering,
-            robotics software, and business intelligence. I've built KPI dashboards from scratch, analysed shipping
-            data to hit growth targets, and even programmed autonomous robots.
+      <section id="about" style={{ padding: '6rem 2rem', background: '#f5f5f7' }}>
+        <div style={{ maxWidth: 800, margin: '0 auto', textAlign: 'center' }}>
+          <p style={{ fontSize: 13, fontWeight: 600, color: '#6e6e73', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 16 }}>About</p>
+          <h2 style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 700, letterSpacing: '-0.03em', color: '#1d1d1f', lineHeight: 1.2, marginBottom: 28 }}>
+            Engineer at heart.<br />Analyst by practice.
+          </h2>
+          <p style={{ fontSize: 17, color: '#6e6e73', lineHeight: 1.8, marginBottom: 18 }}>
+            I'm a data scientist with a multidisciplinary background spanning mechatronic engineering, robotics software, and business intelligence. From programming autonomous robots in Thailand to building KPI dashboards for Ninja Van in Myanmar, I bring both technical depth and business context to every problem.
           </p>
-          <p style={{ fontSize: 15, color: s.gray, lineHeight: 1.85, maxWidth: 640 }}>
-            Currently based in Kuala Lumpur, I work at Accenture's Trust & Safety team while applying my MSc.
-            in Business Analytics & Digital Transformation from the Asian Institute of Technology. I'm passionate
-            about turning messy data into clear decisions.
+          <p style={{ fontSize: 17, color: '#6e6e73', lineHeight: 1.8 }}>
+            Currently based in Kuala Lumpur working at Accenture, and recently completed an MSc. in Business Analytics & Digital Transformation at the Asian Institute of Technology.
           </p>
         </div>
       </section>
 
       {/* ── Skills ── */}
-      <section id="skills" style={{ padding: '4.5rem 2rem', background: s.bgAlt, borderTop: `1px solid ${s.border}` }}>
-        <div style={{ maxWidth: 1100, margin: '0 auto' }}>
-          <SectionLabel>02 / Skills</SectionLabel>
-          <SectionHeading>Tech &amp; tools</SectionHeading>
-          <div style={{ marginTop: 36, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))', gap: 18 }}>
+      <section id="skills" style={{ padding: '6rem 2rem', background: '#fff' }}>
+        <div style={{ maxWidth: 1000, margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: 52 }}>
+            <p style={{ fontSize: 13, fontWeight: 600, color: '#6e6e73', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 16 }}>Skills</p>
+            <h2 style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 700, letterSpacing: '-0.03em', color: '#1d1d1f' }}>Tech &amp; tools</h2>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 20 }}>
             {SKILLS.map(({ category, items }) => (
-              <div key={category} style={{ background: '#fff', border: `1px solid ${s.border}`, borderRadius: 12, padding: '1.25rem' }}>
-                <p className="fm" style={{ fontSize: 11, color: s.teal, letterSpacing: '.12em', textTransform: 'uppercase', marginBottom: 14 }}>{category}</p>
+              <div key={category} style={{
+                background: '#f5f5f7', borderRadius: 20, padding: '1.75rem',
+              }}>
+                <p style={{ fontSize: 12, fontWeight: 600, color: '#6e6e73', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 16 }}>{category}</p>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-                  {items.map((item) => <Tag key={item}>{item}</Tag>)}
+                  {items.map(item => (
+                    <span key={item} style={{
+                      fontSize: 13, fontWeight: 500, padding: '6px 14px',
+                      borderRadius: 980, background: '#fff',
+                      color: '#1d1d1f', boxShadow: '0 1px 4px rgba(0,0,0,0.08)',
+                    }}>{item}</span>
+                  ))}
                 </div>
               </div>
             ))}
@@ -294,52 +370,95 @@ export default function App() {
         </div>
       </section>
 
-      {/* ── Projects ── */}
-      <section id="projects" style={{ padding: '4.5rem 2rem', borderTop: `1px solid ${s.border}`, maxWidth: 1100, margin: '0 auto' }}>
-        <SectionLabel>03 / Projects</SectionLabel>
-        <SectionHeading>Selected work</SectionHeading>
-        <div style={{ marginTop: 36, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 20 }}>
-          {PROJECTS.map(({ name, desc, tags, link }) => (
-            <div key={name} style={{
-              background: '#fff', border: `1px solid ${s.border}`, borderRadius: 12,
-              padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: 14,
-              transition: 'border-color .2s, transform .2s',
-            }}
-              onMouseEnter={(e) => { e.currentTarget.style.borderColor = s.teal; e.currentTarget.style.transform = 'translateY(-2px)' }}
-              onMouseLeave={(e) => { e.currentTarget.style.borderColor = s.border; e.currentTarget.style.transform = 'translateY(0)' }}
-            >
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                <p className="fd" style={{ fontSize: '1.2rem', fontWeight: 400, color: s.black }}>{name}</p>
-                <a href={link} target="_blank" rel="noreferrer" style={{ fontSize: 16, color: '#bbb', textDecoration: 'none', marginLeft: 12, flexShrink: 0 }}>↗</a>
-              </div>
-              <p style={{ fontSize: 13, color: s.gray, lineHeight: 1.75, flex: 1 }}>{desc}</p>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-                {tags.map((t) => <Tag key={t} teal>{t}</Tag>)}
-              </div>
+      {/* ── Featured ── */}
+      <section id="featured" style={{ padding: '6rem 2rem', background: '#000' }}>
+        <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: 52 }}>
+            <p style={{ fontSize: 13, fontWeight: 600, color: '#6e6e73', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 16 }}>Featured</p>
+            <h2 style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 700, letterSpacing: '-0.03em', color: '#f5f5f7' }}>In action</h2>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 40, alignItems: 'center' }}>
+            <div style={{ borderRadius: 20, overflow: 'hidden', background: '#1c1c1e', aspectRatio: '16/9' }}>
+              <iframe
+                width="100%" height="100%"
+                src="https://www.youtube.com/embed/DIdE7EMJeUc"
+                title="AMR Cycle Test"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                style={{ border: 'none', display: 'block' }}
+              />
             </div>
-          ))}
+            <div>
+              <p style={{ fontSize: 13, fontWeight: 600, color: '#6e6e73', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 14 }}>Robotics</p>
+              <h3 style={{ fontSize: '1.8rem', fontWeight: 700, color: '#f5f5f7', letterSpacing: '-0.02em', lineHeight: 1.25, marginBottom: 16 }}>
+                Autonomous Mobile Robot — Cycle Test
+              </h3>
+              <p style={{ fontSize: 15, color: '#98989d', lineHeight: 1.8, marginBottom: 24 }}>
+                Test recording of an AMR completing two full movement cycles. Captured at ATS & P Engineering to review motor response, PID control behaviour, and navigation accuracy before deployment.
+              </p>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 24 }}>
+                {['AMR', 'Robotics', 'PID Control', 'Python', 'Embedded Systems'].map(t => (
+                  <span key={t} style={{ fontSize: 12, fontWeight: 500, padding: '5px 12px', borderRadius: 980, background: '#2c2c2e', color: '#98989d' }}>{t}</span>
+                ))}
+              </div>
+              <a href="https://youtu.be/DIdE7EMJeUc" target="_blank" rel="noreferrer"
+                style={{ fontSize: 15, color: '#0071e3', textDecoration: 'none', fontWeight: 500 }}>
+                Watch on YouTube ↗
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Projects ── */}
+      <section id="projects" style={{ padding: '6rem 2rem', background: '#f5f5f7' }}>
+        <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: 52 }}>
+            <p style={{ fontSize: 13, fontWeight: 600, color: '#6e6e73', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 16 }}>Projects</p>
+            <h2 style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 700, letterSpacing: '-0.03em', color: '#1d1d1f', marginBottom: 12 }}>Selected work</h2>
+            <p style={{ fontSize: 15, color: '#6e6e73' }}>Click any Tableau card to preview the live dashboard.</p>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 24 }}>
+            {PROJECTS.map((project) => (
+              <ProjectCard
+                key={project.name}
+                project={project}
+                isExpanded={expandedProject === project.name}
+                onToggle={() => setExpandedProject(expandedProject === project.name ? null : project.name)}
+              />
+            ))}
+          </div>
         </div>
       </section>
 
       {/* ── Experience ── */}
-      <section id="experience" style={{ padding: '4.5rem 2rem', borderTop: `1px solid ${s.border}`, maxWidth: 1100, margin: '0 auto' }}>
-        <SectionLabel>04 / Experience</SectionLabel>
-        <SectionHeading>Work history</SectionHeading>
-        <div style={{ marginTop: 40 }}>
+      <section id="experience" style={{ padding: '6rem 2rem', background: '#fff' }}>
+        <div style={{ maxWidth: 800, margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: 52 }}>
+            <p style={{ fontSize: 13, fontWeight: 600, color: '#6e6e73', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 16 }}>Experience</p>
+            <h2 style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 700, letterSpacing: '-0.03em', color: '#1d1d1f' }}>Work history</h2>
+          </div>
           {EXPERIENCE.map(({ role, company, period, bullets, tags }) => (
-            <div key={role} style={{ display: 'grid', gridTemplateColumns: '3px 1fr', gap: '0 1.25rem', marginBottom: '2.5rem' }}>
-              <div style={{ background: s.teal, borderRadius: 2 }} />
+            <div key={role} style={{
+              display: 'grid', gridTemplateColumns: '2px 1fr', gap: '0 1.5rem', marginBottom: '2.5rem',
+            }}>
+              <div style={{ background: '#e5e5ea', borderRadius: 2 }} />
               <div>
-                <p className="fm" style={{ fontSize: 11, color: '#aaa', marginBottom: 6 }}>{period}</p>
-                <p className="fd" style={{ fontSize: '1.15rem', fontWeight: 400, color: s.black, marginBottom: 2 }}>{role}</p>
-                <p style={{ fontSize: 13, color: s.lightGray, marginBottom: 14 }}>{company}</p>
+                <p style={{ fontSize: 12, fontWeight: 500, color: '#6e6e73', marginBottom: 6, letterSpacing: '0.02em' }}>{period}</p>
+                <p style={{ fontSize: '1.1rem', fontWeight: 600, color: '#1d1d1f', marginBottom: 2 }}>{role}</p>
+                <p style={{ fontSize: 14, color: '#6e6e73', marginBottom: 14 }}>{company}</p>
                 <ul style={{ paddingLeft: '1rem', display: 'flex', flexDirection: 'column', gap: 6, marginBottom: 14 }}>
-                  {bullets.map((b) => (
-                    <li key={b} style={{ fontSize: 13, color: s.gray, lineHeight: 1.75 }}>{b}</li>
+                  {bullets.map(b => (
+                    <li key={b} style={{ fontSize: 14, color: '#6e6e73', lineHeight: 1.7 }}>{b}</li>
                   ))}
                 </ul>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-                  {tags.map((t) => <Tag key={t} teal>{t}</Tag>)}
+                  {tags.map(t => (
+                    <span key={t} style={{
+                      fontSize: 11, fontWeight: 500, padding: '4px 10px',
+                      borderRadius: 980, background: '#f5f5f7', color: '#1d1d1f',
+                    }}>{t}</span>
+                  ))}
                 </div>
               </div>
             </div>
@@ -348,22 +467,18 @@ export default function App() {
       </section>
 
       {/* ── Education ── */}
-      <section id="education" style={{ padding: '4.5rem 2rem', background: s.bgAlt, borderTop: `1px solid ${s.border}` }}>
-        <div style={{ maxWidth: 1100, margin: '0 auto' }}>
-          <SectionLabel>05 / Education</SectionLabel>
-          <SectionHeading>Academic background</SectionHeading>
-          <div style={{ marginTop: 36, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 18 }}>
-            {EDUCATION.map(({ degree, school, period, accent }) => (
-              <div key={degree} style={{
-                background: '#fff',
-                border: `1px solid ${s.border}`,
-                borderLeft: `3px solid ${accent}`,
-                borderRadius: '0 12px 12px 0',
-                padding: '1.25rem',
-              }}>
-                <p className="fm" style={{ fontSize: 11, color: accent, marginBottom: 8 }}>{period}</p>
-                <p className="fd" style={{ fontSize: '1.05rem', fontWeight: 400, color: s.black, marginBottom: 4 }}>{degree}</p>
-                <p style={{ fontSize: 13, color: s.lightGray }}>{school}</p>
+      <section id="education" style={{ padding: '6rem 2rem', background: '#f5f5f7' }}>
+        <div style={{ maxWidth: 800, margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: 52 }}>
+            <p style={{ fontSize: 13, fontWeight: 600, color: '#6e6e73', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 16 }}>Education</p>
+            <h2 style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 700, letterSpacing: '-0.03em', color: '#1d1d1f' }}>Academic background</h2>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 20 }}>
+            {EDUCATION.map(({ degree, school, period }) => (
+              <div key={degree} style={{ background: '#fff', borderRadius: 20, padding: '2rem', boxShadow: '0 2px 20px rgba(0,0,0,0.06)' }}>
+                <p style={{ fontSize: 13, fontWeight: 600, color: '#0071e3', marginBottom: 12 }}>{period}</p>
+                <p style={{ fontSize: '1.05rem', fontWeight: 600, color: '#1d1d1f', lineHeight: 1.4, marginBottom: 6 }}>{degree}</p>
+                <p style={{ fontSize: 14, color: '#6e6e73' }}>{school}</p>
               </div>
             ))}
           </div>
@@ -371,28 +486,32 @@ export default function App() {
       </section>
 
       {/* ── Contact ── */}
-      <section id="contact" style={{ padding: '5rem 2rem', background: s.black, color: s.bg }}>
-        <div style={{ maxWidth: 1100, margin: '0 auto' }}>
-          <SectionLabel>06 / Contact</SectionLabel>
-          <h2 className="fd" style={{ fontSize: '1.9rem', fontWeight: 400, lineHeight: 1.2, marginBottom: 14 }}>Let's connect</h2>
-          <p style={{ fontSize: 14, color: '#888', lineHeight: 1.8, marginBottom: 36, maxWidth: 460 }}>
+      <section id="contact" style={{ padding: '8rem 2rem', background: '#000', textAlign: 'center' }}>
+        <div style={{ maxWidth: 600, margin: '0 auto' }}>
+          <p style={{ fontSize: 13, fontWeight: 600, color: '#6e6e73', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 16 }}>Contact</p>
+          <h2 style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', fontWeight: 700, letterSpacing: '-0.03em', color: '#f5f5f7', lineHeight: 1.15, marginBottom: 20 }}>
+            Let's build something together.
+          </h2>
+          <p style={{ fontSize: 17, color: '#6e6e73', lineHeight: 1.75, marginBottom: 48 }}>
             Open to data science, analytics, and BI roles. I read every message.
           </p>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 12, maxWidth: 460 }}>
-            {CONTACT.map(({ label, value, href }) => (
-              <a key={label} href={href} style={{
-                display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-                padding: '.9rem 1.1rem',
-                border: '1px solid #2d2d2d',
-                borderRadius: 10,
-                textDecoration: 'none',
-                transition: 'border-color .2s, background .2s',
-              }}
-                onMouseEnter={(e) => { e.currentTarget.style.borderColor = s.teal; e.currentTarget.style.background = '#111' }}
-                onMouseLeave={(e) => { e.currentTarget.style.borderColor = '#2d2d2d'; e.currentTarget.style.background = 'transparent' }}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            {[
+              { label: 'Email', value: 'phyominthant840@gmail.com', href: 'mailto:phyominthant840@gmail.com' },
+              { label: 'LinkedIn', value: 'linkedin.com/in/phyoeminthant', href: 'https://www.linkedin.com/in/phyoeminthant/' },
+              { label: 'Phone', value: '0111-254-8750', href: 'tel:+601112548750' },
+            ].map(({ label, value, href }) => (
+              <a key={label} href={href} target={href.startsWith('http') ? '_blank' : undefined} rel="noreferrer"
+                style={{
+                  display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                  padding: '1.1rem 1.5rem', background: '#1c1c1e', borderRadius: 14,
+                  textDecoration: 'none', transition: 'background .2s',
+                }}
+                onMouseEnter={e => e.currentTarget.style.background = '#2c2c2e'}
+                onMouseLeave={e => e.currentTarget.style.background = '#1c1c1e'}
               >
-                <span className="fm" style={{ fontSize: 11, color: '#555', textTransform: 'uppercase', letterSpacing: '.1em' }}>{label}</span>
-                <span style={{ fontSize: 13, color: '#aaa' }}>{value}</span>
+                <span style={{ fontSize: 12, fontWeight: 600, color: '#6e6e73', letterSpacing: '0.06em', textTransform: 'uppercase' }}>{label}</span>
+                <span style={{ fontSize: 14, color: '#f5f5f7' }}>{value}</span>
               </a>
             ))}
           </div>
@@ -400,8 +519,8 @@ export default function App() {
       </section>
 
       {/* ── Footer ── */}
-      <footer style={{ background: s.black, borderTop: '1px solid #1a1a1a', padding: '1.25rem 2rem', textAlign: 'center' }}>
-        <p className="fm" style={{ fontSize: 11, color: '#444' }}>© 2026 Phyo Min Thant — Kuala Lumpur, MY</p>
+      <footer style={{ background: '#000', borderTop: '1px solid #1c1c1e', padding: '1.5rem 2rem', textAlign: 'center' }}>
+        <p style={{ fontSize: 12, color: '#3a3a3c', fontWeight: 500 }}>© 2026 Phyo Min Thant — Kuala Lumpur, MY</p>
       </footer>
     </div>
   )
