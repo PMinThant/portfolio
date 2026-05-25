@@ -89,12 +89,36 @@ const PROJECTS = [
     tags: ['Google Sheets', 'Google Slides', 'ChatGPT', 'Descriptive Statistics'],
     link: 'https://github.com/PMinThant/statistics/tree/main/01-health-sleep-descriptive-stats',
   },
+  {
+    name: 'Roles in Analytics',
+    desc: 'An interactive Tableau viz mapping out the landscape of analytics roles — comparing responsibilities, required skills, and career paths across data analyst, data scientist, and data engineer positions. Reached 6,900+ views on Tableau Public.',
+    tags: ['Tableau', 'Career Analytics', 'Data Storytelling'],
+    link: 'https://public.tableau.com/app/profile/phyo.min.thant/viz/RolesinAnalytics_17656971884390/RolesinAnalytics',
+  },
+  {
+    name: 'Maven Roasters Dashboard',
+    desc: 'Advanced Tableau dashboard analysing sales performance for a fictional coffee chain. Applies LOD expressions, calculated fields, and dynamic filters to surface revenue trends, top products, and store-level comparisons.',
+    tags: ['Tableau', 'Advanced Analytics', 'LOD Expressions', 'Dashboard Design'],
+    link: 'https://public.tableau.com/app/profile/phyo.min.thant/viz/MavenRoastersDashboard-TableauAdvancedPractice/MavenRoasters',
+  },
+  {
+    name: 'Washington State Dept of Energy',
+    desc: 'Geospatial dashboard tracking Battery Electric Vehicle (BEV) and Plug-in Hybrid (PHEV) adoption across Washington State. Visualises regional EV distribution and growth trends to support energy infrastructure planning.',
+    tags: ['Tableau', 'Geospatial', 'Energy', 'EV Analytics'],
+    link: 'https://public.tableau.com/app/profile/phyo.min.thant/viz/WashingtonStateDepartmentofEnergy_17340429458390/WashingtonBEVsPHEVS',
+  },
+  {
+    name: 'Global CO2 Emission',
+    desc: 'World-level analysis of CO2 emissions trends across countries and industries. Combines time-series and geographic views to highlight the biggest emitters, emission growth rates, and per-capita comparisons.',
+    tags: ['Tableau', 'Environmental Analytics', 'Global Data', 'Time Series'],
+    link: 'https://public.tableau.com/app/profile/phyo.min.thant/viz/GlobalCO2Emission_17632518166410/GlobalCO2Emission',
+  },
 ]
 
 const CONTACT = [
   { label: 'Email', value: 'phyominthant840@gmail.com', href: 'mailto:phyominthant840@gmail.com' },
   { label: 'Phone', value: '0111-254-8750', href: 'tel:+601112548750' },
-  { label: 'LinkedIn', value: 'View profile', href: 'linkedin.com/in/phyoeminthant' }, // replace # with your LinkedIn URL
+  { label: 'LinkedIn', value: 'View profile', href: '#' }, // replace # with your LinkedIn URL
 ]
 
 const NAV_SECTIONS = ['about', 'skills', 'projects', 'experience', 'education', 'contact']
