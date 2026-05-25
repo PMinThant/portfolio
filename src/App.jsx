@@ -15,7 +15,12 @@ const PROJECTS = [
     desc: 'Interactive viz mapping the analytics career landscape — comparing responsibilities, skills, and paths across analyst, scientist, and engineer roles. Over 6,900 views on Tableau Public.',
     tags: ['Tableau', 'Career Analytics', 'Data Storytelling'],
     link: 'https://public.tableau.com/app/profile/phyo.min.thant/viz/RolesinAnalytics_17656971884390/RolesinAnalytics',
-    embed: 'https://public.tableau.com/views/RolesinAnalytics_17656971884390/RolesinAnalytics?:embed=y&:showVizHome=no&:toolbar=no',
+    tableauVizId: 'viz1779694923770',
+    tableauName: 'RolesinAnalytics_17656971884390/RolesinAnalytics',
+    tableauStaticImg: 'https://public.tableau.com/static/images/Ro/RolesinAnalytics_17656971884390/RolesinAnalytics/1.png',
+    tableauRssImg: 'https://public.tableau.com/static/images/Ro/RolesinAnalytics_17656971884390/RolesinAnalytics/1_rss.png',
+    desktopH: '1427px',
+    mobileH: '2427px',
     type: 'tableau',
   },
   {
@@ -23,7 +28,12 @@ const PROJECTS = [
     desc: 'Advanced Tableau dashboard analysing coffee chain sales performance using LOD expressions, calculated fields, and dynamic filters to surface revenue trends and top products.',
     tags: ['Tableau', 'Advanced Analytics', 'LOD Expressions'],
     link: 'https://public.tableau.com/app/profile/phyo.min.thant/viz/MavenRoastersDashboard-TableauAdvancedPractice/MavenRoasters',
-    embed: 'https://public.tableau.com/views/MavenRoastersDashboard-TableauAdvancedPractice/MavenRoasters?:embed=y&:showVizHome=no&:toolbar=no',
+    tableauVizId: 'viz1779694023758',
+    tableauName: 'MavenRoastersDashboard-TableauAdvancedPractice/MavenRoasters',
+    tableauStaticImg: 'https://public.tableau.com/static/images/Ma/MavenRoastersDashboard-TableauAdvancedPractice/MavenRoasters/1.png',
+    tableauRssImg: 'https://public.tableau.com/static/images/Ma/MavenRoastersDashboard-TableauAdvancedPractice/MavenRoasters/1_rss.png',
+    desktopH: '2550px',
+    mobileH: '5050px',
     type: 'tableau',
   },
   {
@@ -31,7 +41,12 @@ const PROJECTS = [
     desc: 'Geospatial dashboard tracking BEV and PHEV adoption across Washington State, visualising regional EV distribution and growth trends to support energy infrastructure planning.',
     tags: ['Tableau', 'Geospatial', 'Energy', 'EV Analytics'],
     link: 'https://public.tableau.com/app/profile/phyo.min.thant/viz/WashingtonStateDepartmentofEnergy_17340429458390/WashingtonBEVsPHEVS',
-    embed: 'https://public.tableau.com/views/WashingtonStateDepartmentofEnergy_17340429458390/WashingtonBEVsPHEVS?:embed=y&:showVizHome=no&:toolbar=no',
+    tableauVizId: 'viz_washington',
+    tableauName: 'WashingtonStateDepartmentofEnergy_17340429458390/WashingtonBEVsPHEVS',
+    tableauStaticImg: 'https://public.tableau.com/static/images/Wa/WashingtonStateDepartmentofEnergy_17340429458390/WashingtonBEVsPHEVS/1.png',
+    tableauRssImg: 'https://public.tableau.com/static/images/Wa/WashingtonStateDepartmentofEnergy_17340429458390/WashingtonBEVsPHEVS/1_rss.png',
+    desktopH: '827px',
+    mobileH: '1827px',
     type: 'tableau',
   },
   {
@@ -39,7 +54,12 @@ const PROJECTS = [
     desc: 'World-level analysis of CO₂ emission trends across countries and industries, combining time-series and geographic views to highlight biggest emitters and per-capita comparisons.',
     tags: ['Tableau', 'Environmental Analytics', 'Time Series'],
     link: 'https://public.tableau.com/app/profile/phyo.min.thant/viz/GlobalCO2Emission_17632518166410/GlobalCO2Emission',
-    embed: 'https://public.tableau.com/views/GlobalCO2Emission_17632518166410/GlobalCO2Emission?:embed=y&:showVizHome=no&:toolbar=no',
+    tableauVizId: 'viz_co2',
+    tableauName: 'GlobalCO2Emission_17632518166410/GlobalCO2Emission',
+    tableauStaticImg: 'https://public.tableau.com/static/images/Gl/GlobalCO2Emission_17632518166410/GlobalCO2Emission/1.png',
+    tableauRssImg: 'https://public.tableau.com/static/images/Gl/GlobalCO2Emission_17632518166410/GlobalCO2Emission/1_rss.png',
+    desktopH: '827px',
+    mobileH: '1827px',
     type: 'tableau',
   },
   {
@@ -124,103 +144,171 @@ const EDUCATION = [
 
 const NAV_SECTIONS = ['about', 'skills', 'featured', 'projects', 'experience', 'education', 'contact']
 
-// ── ProjectCard ──────────────────────────────────────────────────────────────
+// ── Tableau Embed Component ───────────────────────────────────────────────────
+// Uses the official Tableau JS API embed method (same as the code Tableau generates)
+// so scroll, toolbar, and responsive sizing all work correctly.
 
-function ProjectCard({ project, isExpanded, onToggle }) {
-  const { name, desc, tags, link, embed, type } = project
+function TableauEmbed({ project, isExpanded, onToggle }) {
+  const containerRef = useRef(null)
+  const scriptInjected = useRef(false)
+
+  useEffect(() => {
+    if (!isExpanded || !containerRef.current || scriptInjected.current) return
+    scriptInjected.current = true
+
+    const container = containerRef.current
+
+    // Build the object element exactly as Tableau generates
+    const div = document.createElement('div')
+    div.className = 'tableauPlaceholder'
+    div.id = project.tableauVizId
+    div.style.position = 'relative'
+
+    const noscript = document.createElement('noscript')
+    const fallbackLink = document.createElement('a')
+    fallbackLink.href = '#'
+    const fallbackImg = document.createElement('img')
+    fallbackImg.alt = project.name
+    fallbackImg.src = project.tableauRssImg
+    fallbackImg.style.border = 'none'
+    fallbackLink.appendChild(fallbackImg)
+    noscript.appendChild(fallbackLink)
+
+    const obj = document.createElement('object')
+    obj.className = 'tableauViz'
+    obj.style.display = 'none'
+
+    const params = [
+      ['host_url', 'https%3A%2F%2Fpublic.tableau.com%2F'],
+      ['embed_code_version', '3'],
+      ['site_root', ''],
+      ['name', project.tableauName],
+      ['tabs', 'yes'],
+      ['toolbar', 'yes'],
+      ['static_image', project.tableauStaticImg],
+      ['animate_transition', 'yes'],
+      ['display_static_image', 'yes'],
+      ['display_spinner', 'yes'],
+      ['display_overlay', 'yes'],
+      ['display_count', 'yes'],
+      ['language', 'en-US'],
+    ]
+    params.forEach(([name, value]) => {
+      const p = document.createElement('param')
+      p.name = name
+      p.value = value
+      obj.appendChild(p)
+    })
+
+    div.appendChild(noscript)
+    div.appendChild(obj)
+    container.appendChild(div)
+
+    // Sizing script — mirrors exactly what Tableau generates
+    const vizElement = obj
+    const setSize = () => {
+      const w = div.offsetWidth
+      if (w > 800) {
+        vizElement.style.width = '1400px'
+        vizElement.style.height = project.desktopH
+      } else if (w > 500) {
+        vizElement.style.width = '1400px'
+        vizElement.style.height = project.desktopH
+      } else {
+        vizElement.style.width = '100%'
+        vizElement.style.height = project.mobileH
+      }
+    }
+    setSize()
+
+    // Load the Tableau viz_v1.js only once globally
+    if (!window.__tableauScriptLoaded) {
+      window.__tableauScriptLoaded = true
+      const s = document.createElement('script')
+      s.src = 'https://public.tableau.com/javascripts/api/viz_v1.js'
+      obj.parentNode.insertBefore(s, obj)
+    } else {
+      // Script already loaded — fire a synthetic load to trigger re-init if needed
+      const s = document.createElement('script')
+      s.src = 'https://public.tableau.com/javascripts/api/viz_v1.js'
+      obj.parentNode.insertBefore(s, obj)
+    }
+
+    return () => {
+      // cleanup if needed
+    }
+  }, [isExpanded, project])
 
   return (
-    <div style={{
-      background: '#fff',
-      borderRadius: 20,
-      overflow: 'hidden',
-      boxShadow: '0 2px 20px rgba(0,0,0,0.08)',
-      transition: 'box-shadow 0.3s, transform 0.3s',
-    }}
-      onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 8px 40px rgba(0,0,0,0.14)'; e.currentTarget.style.transform = 'translateY(-2px)' }}
-      onMouseLeave={e => { e.currentTarget.style.boxShadow = '0 2px 20px rgba(0,0,0,0.08)'; e.currentTarget.style.transform = 'translateY(0)' }}
-    >
-      {/* Dashboard preview */}
-      {type === 'tableau' && (
-        <div style={{ position: 'relative', background: '#f5f5f7' }}>
-          {isExpanded ? (
-            <div style={{ height: 400, position: 'relative' }}>
-              <iframe
-                src={embed}
-                width="100%"
-                height="100%"
-                style={{ border: 'none', display: 'block' }}
-                title={name}
-              />
-              <button
-                onClick={onToggle}
-                style={{
-                  position: 'absolute', top: 12, right: 12,
-                  background: 'rgba(0,0,0,0.5)', color: '#fff',
-                  border: 'none', borderRadius: 20, padding: '6px 14px',
-                  fontSize: 12, cursor: 'pointer', backdropFilter: 'blur(4px)',
-                }}
-              >
-                ✕ Close
-              </button>
-            </div>
-          ) : (
-            <div
-              onClick={onToggle}
-              style={{
-                height: 180, display: 'flex', flexDirection: 'column',
-                alignItems: 'center', justifyContent: 'center', cursor: 'pointer',
-                gap: 10, background: 'linear-gradient(135deg, #f5f5f7 0%, #e8e8ed 100%)',
-              }}
-            >
-              <div style={{
-                width: 48, height: 48, borderRadius: 12,
-                background: '#0071e3', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: 22, boxShadow: '0 4px 12px rgba(0,113,227,0.3)',
+    <div>
+      {/* Preview / Toggle Bar */}
+      <button
+        onClick={onToggle}
+        style={{
+          width: '100%',
+          background: 'none',
+          border: 'none',
+          cursor: 'pointer',
+          padding: 0,
+          textAlign: 'left',
+          display: 'block',
+        }}
+      >
+        {!isExpanded ? (
+          /* Collapsed — show static thumbnail */
+          <div style={{ position: 'relative', background: '#f5f5f7', borderRadius: '12px 12px 0 0', overflow: 'hidden' }}>
+            <img
+              src={project.tableauStaticImg}
+              alt={project.name}
+              style={{ width: '100%', display: 'block', maxHeight: 280, objectFit: 'cover', objectPosition: 'top' }}
+              onError={e => { e.currentTarget.style.display = 'none' }}
+            />
+            {/* Overlay CTA */}
+            <div style={{
+              position: 'absolute', inset: 0,
+              background: 'linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.65) 100%)',
+              display: 'flex', alignItems: 'flex-end', padding: '1.25rem',
+            }}>
+              <span style={{
+                display: 'inline-flex', alignItems: 'center', gap: 6,
+                background: 'rgba(255,255,255,0.18)', backdropFilter: 'blur(8px)',
+                color: '#fff', fontSize: 13, fontWeight: 600,
+                padding: '8px 16px', borderRadius: 980,
+                border: '1px solid rgba(255,255,255,0.25)',
               }}>
-                📊
-              </div>
-              <span style={{ fontSize: 13, color: '#6e6e73', fontWeight: 500 }}>Click to preview dashboard</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                Load interactive dashboard
+              </span>
             </div>
-          )}
-        </div>
-      )}
+          </div>
+        ) : (
+          /* Expanded header — just a thin collapse bar */
+          <div style={{
+            background: '#0071e3', padding: '8px 16px',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+            borderRadius: '12px 12px 0 0',
+          }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5"><path d="M18 15l-6-6-6 6"/></svg>
+            <span style={{ color: '#fff', fontSize: 12, fontWeight: 600 }}>Collapse dashboard</span>
+          </div>
+        )}
+      </button>
 
-      {type === 'github' && (
-        <div style={{
-          height: 120, background: 'linear-gradient(135deg, #1c1c1e 0%, #2c2c2e 100%)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12,
-        }}>
-          <div style={{ fontSize: 32 }}>🔬</div>
-          <span style={{ fontSize: 13, color: '#98989d', fontWeight: 500 }}>Statistical Analysis</span>
-        </div>
+      {/* Tableau Embed Container */}
+      {isExpanded && (
+        <div
+          ref={containerRef}
+          style={{
+            width: '100%',
+            overflow: 'auto',
+            background: '#f5f5f7',
+            borderRadius: '0 0 12px 12px',
+            border: '1px solid #e5e5ea',
+            borderTop: 'none',
+            minHeight: 200,
+          }}
+        />
       )}
-
-      {/* Info */}
-      <div style={{ padding: '1.5rem' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 10 }}>
-          <p style={{ fontSize: '1.05rem', fontWeight: 600, color: '#1d1d1f', lineHeight: 1.3 }}>{name}</p>
-          <a
-            href={link} target="_blank" rel="noreferrer"
-            style={{
-              fontSize: 12, color: '#0071e3', textDecoration: 'none',
-              fontWeight: 500, whiteSpace: 'nowrap', marginLeft: 12, flexShrink: 0,
-            }}
-          >
-            View ↗
-          </a>
-        </div>
-        <p style={{ fontSize: 13, color: '#6e6e73', lineHeight: 1.7, marginBottom: 14 }}>{desc}</p>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-          {tags.map(t => (
-            <span key={t} style={{
-              fontSize: 11, fontWeight: 500,
-              padding: '4px 10px', borderRadius: 20,
-              background: '#f5f5f7', color: '#1d1d1f',
-            }}>{t}</span>
-          ))}
-        </div>
-      </div>
     </div>
   )
 }
@@ -229,8 +317,8 @@ function ProjectCard({ project, isExpanded, onToggle }) {
 
 export default function App() {
   const [activeSection, setActiveSection] = useState('hero')
-  const [expandedProject, setExpandedProject] = useState(null)
   const [scrolled, setScrolled] = useState(false)
+  const [expandedDash, setExpandedDash] = useState(null)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -249,6 +337,8 @@ export default function App() {
   }, [])
 
   const scrollTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+  const tableauProjects = PROJECTS.filter(p => p.type === 'tableau')
+  const otherProjects = PROJECTS.filter(p => p.type !== 'tableau')
 
   return (
     <div style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif", background: '#fff', color: '#1d1d1f' }}>
@@ -412,22 +502,100 @@ export default function App() {
 
       {/* ── Projects ── */}
       <section id="projects" style={{ padding: '6rem 2rem', background: '#f5f5f7' }}>
-        <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+        <div style={{ maxWidth: 1300, margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: 52 }}>
             <p style={{ fontSize: 13, fontWeight: 600, color: '#6e6e73', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 16 }}>Projects</p>
-            <h2 style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 700, letterSpacing: '-0.03em', color: '#1d1d1f', marginBottom: 12 }}>Selected work</h2>
-            <p style={{ fontSize: 15, color: '#6e6e73' }}>Click any Tableau card to preview the live dashboard.</p>
+            <h2 style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 700, letterSpacing: '-0.03em', color: '#1d1d1f' }}>Selected work</h2>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 24 }}>
-            {PROJECTS.map((project) => (
-              <ProjectCard
-                key={project.name}
-                project={project}
-                isExpanded={expandedProject === project.name}
-                onToggle={() => setExpandedProject(expandedProject === project.name ? null : project.name)}
-              />
-            ))}
+
+          {/* Tableau Dashboards */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 560px), 1fr))', gap: 28, marginBottom: 52 }}>
+            {tableauProjects.map((project) => {
+              const { name, desc, tags, link, tableauVizId } = project
+              const isExpanded = expandedDash === tableauVizId
+              return (
+                <div key={name} style={{
+                  background: '#fff', borderRadius: 20,
+                  overflow: 'hidden', boxShadow: '0 2px 20px rgba(0,0,0,0.06)',
+                  transition: 'box-shadow 0.3s',
+                }}
+                  onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 8px 40px rgba(0,0,0,0.10)' }}
+                  onMouseLeave={e => { e.currentTarget.style.boxShadow = '0 2px 20px rgba(0,0,0,0.06)' }}
+                >
+                  {/* Tableau Embed with click-to-expand */}
+                  <TableauEmbed
+                    project={project}
+                    isExpanded={isExpanded}
+                    onToggle={() => setExpandedDash(isExpanded ? null : tableauVizId)}
+                  />
+
+                  {/* Info */}
+                  <div style={{ padding: '1.5rem 1.75rem 1.75rem' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 10 }}>
+                      <h3 style={{ fontSize: '1.05rem', fontWeight: 600, color: '#1d1d1f', lineHeight: 1.3 }}>{name}</h3>
+                      <a
+                        href={link} target="_blank" rel="noreferrer"
+                        style={{
+                          fontSize: 12, color: '#0071e3', textDecoration: 'none',
+                          fontWeight: 500, whiteSpace: 'nowrap', marginLeft: 12, flexShrink: 0,
+                        }}
+                      >
+                        Open in Tableau ↗
+                      </a>
+                    </div>
+                    <p style={{ fontSize: 13, color: '#6e6e73', lineHeight: 1.7, marginBottom: 14 }}>{desc}</p>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                      {tags.map(t => (
+                        <span key={t} style={{
+                          fontSize: 11, fontWeight: 500,
+                          padding: '4px 10px', borderRadius: 980,
+                          background: '#f5f5f7', color: '#1d1d1f',
+                        }}>{t}</span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )
+            })}
           </div>
+
+          {/* Other Projects */}
+          {otherProjects.map(({ name, desc, tags, link }) => (
+            <div key={name} style={{
+              background: '#fff', borderRadius: 20, padding: '2rem',
+              boxShadow: '0 2px 20px rgba(0,0,0,0.06)', marginBottom: 20,
+              display: 'grid', gridTemplateColumns: '160px 1fr', gap: '2rem', alignItems: 'start',
+              transition: 'box-shadow 0.3s, transform 0.3s',
+            }}
+              onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 8px 40px rgba(0,0,0,0.12)'; e.currentTarget.style.transform = 'translateY(-4px)' }}
+              onMouseLeave={e => { e.currentTarget.style.boxShadow = '0 2px 20px rgba(0,0,0,0.06)'; e.currentTarget.style.transform = 'translateY(0)' }}
+            >
+              <div style={{
+                height: 160, borderRadius: 16, background: 'linear-gradient(135deg, #1c1c1e 0%, #2c2c2e 100%)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 56,
+              }}>
+                🔬
+              </div>
+              <div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 12 }}>
+                  <h3 style={{ fontSize: '1.15rem', fontWeight: 600, color: '#1d1d1f' }}>{name}</h3>
+                  <a href={link} target="_blank" rel="noreferrer"
+                    style={{ fontSize: 12, color: '#0071e3', textDecoration: 'none', fontWeight: 500 }}>
+                    View ↗
+                  </a>
+                </div>
+                <p style={{ fontSize: 14, color: '#6e6e73', lineHeight: 1.75, marginBottom: 16 }}>{desc}</p>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                  {tags.map(t => (
+                    <span key={t} style={{
+                      fontSize: 11, fontWeight: 500, padding: '4px 10px',
+                      borderRadius: 980, background: '#f5f5f7', color: '#1d1d1f',
+                    }}>{t}</span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </section>
 
