@@ -66,7 +66,14 @@ const EXPERIENCE = [
     tags: ['Looker Studio', 'Metabase', 'PowerBI', 'KPI'],
   },
 ]
-
+const PROJECTS = [
+  {
+    name: 'Sleep & Health Lifestyle Analysis',
+    desc: 'Explores a health and lifestyle dataset to uncover patterns in sleep quality and related metrics. Identifies key trends, outliers, and relationships between sleep duration, physical activity, stress levels, and overall health indicators using descriptive statistics.',
+    tags: ['Google Sheets', 'Google Slides', 'ChatGPT', 'Descriptive Statistics'],
+    link: 'https://github.com/PMinThant/statistics/tree/main/01-health-sleep-descriptive-stats',
+  },
+]
 const EDUCATION = [
   {
     degree: 'MSc. Business Analytics & Digital Transformation',
