@@ -66,14 +66,7 @@ const EXPERIENCE = [
     tags: ['Looker Studio', 'Metabase', 'PowerBI', 'KPI'],
   },
 ]
-const PROJECTS = [
-  {
-    name: 'Sleep & Health Lifestyle Analysis',
-    desc: 'Explores a health and lifestyle dataset to uncover patterns in sleep quality and related metrics. Identifies key trends, outliers, and relationships between sleep duration, physical activity, stress levels, and overall health indicators using descriptive statistics.',
-    tags: ['Google Sheets', 'Google Slides', 'ChatGPT', 'Descriptive Statistics'],
-    link: 'https://github.com/PMinThant/statistics/tree/main/01-health-sleep-descriptive-stats',
-  },
-]
+
 const EDUCATION = [
   {
     degree: 'MSc. Business Analytics & Digital Transformation',
@@ -89,13 +82,22 @@ const EDUCATION = [
   },
 ]
 
+const PROJECTS = [
+  {
+    name: 'Sleep & Health Lifestyle Analysis',
+    desc: 'Explores a health and lifestyle dataset to uncover patterns in sleep quality and related metrics. Identifies key trends, outliers, and relationships between sleep duration, physical activity, stress levels, and overall health indicators using descriptive statistics.',
+    tags: ['Google Sheets', 'Google Slides', 'ChatGPT', 'Descriptive Statistics'],
+    link: 'https://github.com/PMinThant/statistics/tree/main/01-health-sleep-descriptive-stats',
+  },
+]
+
 const CONTACT = [
   { label: 'Email', value: 'phyominthant840@gmail.com', href: 'mailto:phyominthant840@gmail.com' },
   { label: 'Phone', value: '0111-254-8750', href: 'tel:+601112548750' },
   { label: 'LinkedIn', value: 'View profile', href: 'linkedin.com/in/phyoeminthant' }, // replace # with your LinkedIn URL
 ]
 
-const NAV_SECTIONS = ['about', 'skills', 'experience', 'education', 'contact']
+const NAV_SECTIONS = ['about', 'skills', 'projects', 'experience', 'education', 'contact']
 
 // ── Styles (inline) ──────────────────────────────────────────────────────────
 
@@ -268,9 +270,36 @@ export default function App() {
         </div>
       </section>
 
+      {/* ── Projects ── */}
+      <section id="projects" style={{ padding: '4.5rem 2rem', borderTop: `1px solid ${s.border}`, maxWidth: 1100, margin: '0 auto' }}>
+        <SectionLabel>03 / Projects</SectionLabel>
+        <SectionHeading>Selected work</SectionHeading>
+        <div style={{ marginTop: 36, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 20 }}>
+          {PROJECTS.map(({ name, desc, tags, link }) => (
+            <div key={name} style={{
+              background: '#fff', border: `1px solid ${s.border}`, borderRadius: 12,
+              padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: 14,
+              transition: 'border-color .2s, transform .2s',
+            }}
+              onMouseEnter={(e) => { e.currentTarget.style.borderColor = s.teal; e.currentTarget.style.transform = 'translateY(-2px)' }}
+              onMouseLeave={(e) => { e.currentTarget.style.borderColor = s.border; e.currentTarget.style.transform = 'translateY(0)' }}
+            >
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                <p className="fd" style={{ fontSize: '1.2rem', fontWeight: 400, color: s.black }}>{name}</p>
+                <a href={link} target="_blank" rel="noreferrer" style={{ fontSize: 16, color: '#bbb', textDecoration: 'none', marginLeft: 12, flexShrink: 0 }}>↗</a>
+              </div>
+              <p style={{ fontSize: 13, color: s.gray, lineHeight: 1.75, flex: 1 }}>{desc}</p>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                {tags.map((t) => <Tag key={t} teal>{t}</Tag>)}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* ── Experience ── */}
       <section id="experience" style={{ padding: '4.5rem 2rem', borderTop: `1px solid ${s.border}`, maxWidth: 1100, margin: '0 auto' }}>
-        <SectionLabel>03 / Experience</SectionLabel>
+        <SectionLabel>04 / Experience</SectionLabel>
         <SectionHeading>Work history</SectionHeading>
         <div style={{ marginTop: 40 }}>
           {EXPERIENCE.map(({ role, company, period, bullets, tags }) => (
@@ -297,7 +326,7 @@ export default function App() {
       {/* ── Education ── */}
       <section id="education" style={{ padding: '4.5rem 2rem', background: s.bgAlt, borderTop: `1px solid ${s.border}` }}>
         <div style={{ maxWidth: 1100, margin: '0 auto' }}>
-          <SectionLabel>04 / Education</SectionLabel>
+          <SectionLabel>05 / Education</SectionLabel>
           <SectionHeading>Academic background</SectionHeading>
           <div style={{ marginTop: 36, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 18 }}>
             {EDUCATION.map(({ degree, school, period, accent }) => (
@@ -320,7 +349,7 @@ export default function App() {
       {/* ── Contact ── */}
       <section id="contact" style={{ padding: '5rem 2rem', background: s.black, color: s.bg }}>
         <div style={{ maxWidth: 1100, margin: '0 auto' }}>
-          <SectionLabel>05 / Contact</SectionLabel>
+          <SectionLabel>06 / Contact</SectionLabel>
           <h2 className="fd" style={{ fontSize: '1.9rem', fontWeight: 400, lineHeight: 1.2, marginBottom: 14 }}>Let's connect</h2>
           <p style={{ fontSize: 14, color: '#888', lineHeight: 1.8, marginBottom: 36, maxWidth: 460 }}>
             Open to data science, analytics, and BI roles. I read every message.
