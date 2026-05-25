@@ -85,7 +85,7 @@ const EDUCATION = [
 const CONTACT = [
   { label: 'Email', value: 'phyominthant840@gmail.com', href: 'mailto:phyominthant840@gmail.com' },
   { label: 'Phone', value: '0111-254-8750', href: 'tel:+601112548750' },
-  { label: 'LinkedIn', value: 'View profile', href: '#' }, // replace # with your LinkedIn URL
+  { label: 'LinkedIn', value: 'View profile', href: 'linkedin.com/in/phyoeminthant' }, // replace # with your LinkedIn URL
 ]
 
 const NAV_SECTIONS = ['about', 'skills', 'experience', 'education', 'contact']
