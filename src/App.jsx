@@ -520,6 +520,16 @@ export default function App() {
       <footer style={{ background: '#000', borderTop: '1px solid #1c1c1e', padding: '1.5rem 2rem', textAlign: 'center' }}>
         <p style={{ fontSize: 12, color: '#3a3a3c', fontWeight: 500 }}>© 2026 Phyo Min Thant — Kuala Lumpur, MY</p>
       </footer>
+      <a
+        href="https://outlook.office.com/book/StoreConsulting@ascendshopping.com/?ismsaljsauthenabled"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="floating-booking-button"
+        aria-label="Schedule an online consultation"
+      >
+        <span className="booking-icon">↗</span>
+        <span>Schedule a Consultation</span>
+      </a>
     </div>
   )
 }

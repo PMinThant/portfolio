@@ -17,3 +17,64 @@ body {
 
 .fd { font-family: 'Fraunces', serif; }
 .fm { font-family: 'JetBrains Mono', monospace; }
+
+/* Floating Booking Button */
+.floating-booking-button {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 1000;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+
+  padding: 13px 18px;
+  border-radius: 999px;
+
+  background: #111111;
+  color: #ffffff;
+  text-decoration: none;
+
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.16);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.floating-booking-button:hover {
+  transform: translateY(-3px);
+  background: #0a66c2;
+  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.2);
+}
+
+.booking-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 22px;
+  height: 22px;
+
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.14);
+
+  font-size: 13px;
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  .floating-booking-button {
+    right: 16px;
+    bottom: 16px;
+
+    padding: 12px 15px;
+    font-size: 13px;
+  }
+}
